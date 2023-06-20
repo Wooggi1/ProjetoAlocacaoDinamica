@@ -20,7 +20,7 @@ struct node {
 struct node *startNode;
 struct node *nodeBuffer;
 
-static void createListHead();
+static void addNodes();
 int generateID();
 int validateEmail(char email[]);
 int validateSex(char sexo[]);
@@ -30,16 +30,29 @@ static void createUser();
 //static int displayList();
 
 
-int nodeCounter;
+int nodeCounter = 0;
 
 int main () {
+    int opcao;
 
-    createListHead();
+    do{
+        printf("digita ai fi dps faz menu: ");
+        scanf("%d", &opcao);
+        switch (opcao)
+        {
+        case 1:
+            addNodes();
+            break;
+        default:
+            break;
+        }
+    }while (opcao != 0);
+    
     //displayList();
     return 0;
 }
 
-static void createListHead(){
+static void addNodes(){
     struct node *newNode;
     int nodeID, nodeVaccine;
     char nodeName[100], nodeEmail[100], nodeSex[20], nodeAddress[100];
@@ -47,7 +60,7 @@ static void createListHead(){
 
     startNode = (struct node*)malloc(sizeof(struct node));
 
-    printf("Digite os dados do primeiro no abaixo\n");
+    printf("Digite os dados do node abaixo\n");
     printf("Digite o nome completo: ");
     scanf(" %[^\n]", nodeName);
     printf("Digite o email: ");
@@ -87,18 +100,36 @@ static void createListHead(){
         scanf("%d", &nodeVaccine);
     }
     
+    if (nodeCounter == 0){
+        startNode->ID = generateID();
+        strcpy(startNode->name, nodeName);
+        strcpy(startNode->email, nodeEmail);
+        strcpy(startNode->sex, nodeSex);
+        strcpy(startNode->address, nodeAddress);
+        startNode->height = nodeHeight;
+        startNode->vaccine = nodeVaccine;
+        startNode->PtrNext = NULL;
+        nodeBuffer = startNode;
+        nodeCounter = 1;
+        printf("%d\n%s\n%s\n%s\n%s\n%.2f\n%d\n%p\n", startNode->ID, startNode->name, startNode->email, startNode->sex, startNode->address, startNode->height, startNode->vaccine, &startNode);
+    }
+    else{
+        newNode = (struct node*)malloc(sizeof(struct node));
+        
+        newNode->ID = generateID();
+        strcpy(newNode->name, nodeName);
+        strcpy(newNode->email, nodeEmail);
+        strcpy(newNode->sex, nodeSex);
+        strcpy(newNode->address, nodeAddress);
+        newNode->height = nodeHeight;
+        newNode->vaccine = nodeVaccine;
+        newNode->PtrNext = NULL;
+        nodeBuffer->PtrNext = newNode;
+        nodeBuffer = nodeBuffer->PtrNext;
+        nodeCounter++;
 
-    startNode->ID = generateID();
-    strcpy(startNode->name, nodeName);
-    strcpy(startNode->email, nodeEmail);
-    strcpy(startNode->sex, nodeSex);
-    strcpy(startNode->address, nodeAddress);
-    startNode->height = nodeHeight;
-    startNode->vaccine = nodeVaccine;
-    startNode->PtrNext = NULL;
-    nodeBuffer = startNode;
-
-    printf("%d\n%s\n%s\n%s\n%s\n%.2f\n%d\n%p", startNode->ID, startNode->name, startNode->email, startNode->sex, startNode->address, startNode->height, startNode->vaccine, (void*)startNode->PtrNext);
+        printf("%d\n%s\n%s\n%s\n%s\n%.2f\n%d\n%p\n", newNode->ID, newNode->name, newNode->email, newNode->sex, newNode->address, newNode->height, newNode->vaccine, &newNode);
+    }
 }
 
 int generateID(){
