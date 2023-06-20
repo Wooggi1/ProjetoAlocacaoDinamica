@@ -4,8 +4,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#define MAX_NODES 1000
-
 struct node {
     int ID;
     char name[100];
@@ -36,7 +34,11 @@ int main () {
     int opcao;
 
     do{
-        printf("digita ai fi dps faz menu: ");
+        printf("1 - Criar/Adicionar Nodes a lista\n");
+        printf("2 - Inserir itens na lista\n");
+        printf("3 - Editar dados do Node\n");
+        printf("4 - Excluir Node\n");
+        printf("5 - Listar dados do Node\n");
         scanf("%d", &opcao);
         switch (opcao)
         {
