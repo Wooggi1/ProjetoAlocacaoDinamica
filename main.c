@@ -14,7 +14,7 @@ struct node {
     char address[100];
     double height;
     int vaccine;
-    struct node *PtrProximo;
+    struct node *PtrNext;
 };
 
 struct node *startNode;
@@ -95,10 +95,10 @@ static void createListHead(){
     strcpy(startNode->address, nodeAddress);
     startNode->height = nodeHeight;
     startNode->vaccine = nodeVaccine;
-    startNode->PtrProximo = NULL;
+    startNode->PtrNext = NULL;
     nodeBuffer = startNode;
 
-    printf("%d\n%s\n%s\n%s\n%s\n%.2f\n%d\n%p", startNode->ID, startNode->name, startNode->email, startNode->sex, startNode->address, startNode->height, startNode->vaccine, (void*)startNode->PtrProximo);
+    printf("%d\n%s\n%s\n%s\n%s\n%.2f\n%d\n%p", startNode->ID, startNode->name, startNode->email, startNode->sex, startNode->address, startNode->height, startNode->vaccine, (void*)startNode->PtrNext);
 }
 
 int generateID(){
