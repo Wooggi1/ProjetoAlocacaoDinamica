@@ -18,49 +18,53 @@ struct node {
 struct node *startNode;
 struct node *nodeBuffer;
 
-static void addNodes();
+void addNodes();
+void editNode();
+void displayList();
 int generateID();
 int validateEmail(char email[]);
 int validateSex(char sexo[]);
 int validateHeight(double height);
 int validateVaccine(int vaccine);
-static void createUser();
-//static int displayList();
+ 
 
 
 int nodeCounter = 0;
 
 int main () {
-    int opcao;
+    int option;
 
     do{
         printf("1 - Criar/Adicionar Nodes a lista\n");
-        printf("2 - Inserir itens na lista\n");
-        printf("3 - Editar dados do Node\n");
-        printf("4 - Excluir Node\n");
-        printf("5 - Listar dados do Node\n");
-        scanf("%d", &opcao);
-        switch (opcao)
+        printf("2 - Editar dados do Node\n");
+        printf("3 - Excluir Node\n");
+        printf("4 - Listar dados do Node\n");
+        printf("Digite a opcao: ");
+        scanf("%d", &option);
+        switch (option)
         {
         case 1:
             addNodes();
             break;
+        case 2:
+            editNode();
+            break;
+        case 4:
+            displayList();
+            break;
         default:
             break;
         }
-    }while (opcao != 0);
+    }while (option != 0);
     
-    //displayList();
     return 0;
 }
 
-static void addNodes(){
+void addNodes(){
     struct node *newNode;
     int nodeID, nodeVaccine;
     char nodeName[100], nodeEmail[100], nodeSex[20], nodeAddress[100];
     double nodeHeight;
-
-    startNode = (struct node*)malloc(sizeof(struct node));
 
     printf("Digite os dados do node abaixo\n");
     printf("Digite o nome completo: ");
@@ -103,6 +107,8 @@ static void addNodes(){
     }
     
     if (nodeCounter == 0){
+        startNode = (struct node*)malloc(sizeof(struct node));
+
         startNode->ID = generateID();
         strcpy(startNode->name, nodeName);
         strcpy(startNode->email, nodeEmail);
@@ -113,7 +119,7 @@ static void addNodes(){
         startNode->PtrNext = NULL;
         nodeBuffer = startNode;
         nodeCounter = 1;
-        printf("%d\n%s\n%s\n%s\n%s\n%.2f\n%d\n%p\n", startNode->ID, startNode->name, startNode->email, startNode->sex, startNode->address, startNode->height, startNode->vaccine, &startNode);
+        printf("Node inicial criado com sucesso\n");
     }
     else{
         newNode = (struct node*)malloc(sizeof(struct node));
@@ -129,8 +135,7 @@ static void addNodes(){
         nodeBuffer->PtrNext = newNode;
         nodeBuffer = nodeBuffer->PtrNext;
         nodeCounter++;
-
-        printf("%d\n%s\n%s\n%s\n%s\n%.2f\n%d\n%p\n", newNode->ID, newNode->name, newNode->email, newNode->sex, newNode->address, newNode->height, newNode->vaccine, &newNode);
+        printf("Novo node adicionado a lista com sucesso\n");
     }
 }
 
@@ -187,26 +192,115 @@ int validateVaccine(int vaccine){
     }
 }
 
-static void addUser(){
+void editNode(){
+    struct node *nodeBuffer;
+    char email[100];
+    int found = 0;
+    nodeBuffer = startNode;
+
+    while(found != 1){
+        printf("Digite o email do node que deseja editar: ");
+        scanf(" %[^\n]", &email);
+        if(nodeBuffer == NULL){
+            printf("A lista esta vazia\n");
+            return;
+        }
+        else if (strcmp(nodeBuffer->email, email) == 0){
+            int option;
+            found = 1;
+            do{
+                printf("1 - Editar nome\n");
+                printf("2 - Editar sexo\n");
+                printf("3 - Editar endereco\n");
+                printf("4 - Editar altura\n");
+                printf("5 - Editar status de vacinacao\n");
+                printf("0 - Sair da edicao\n");
+                printf("Opcao escolhida: ");
+                scanf("%d", &option);
+
+                switch (option)
+                {
+                case 1:
+                    printf("Digite o novo nome: ");
+                    scanf(" %[^\n]", nodeBuffer->name);
+                    break;
+                case 2:
+                    char sex[20];
+                    printf("Digite o novo sexo: ");
+                    scanf(" %[^\n]", sex);
+                    sex[0] = toupper(sex[0]);
+
+                    while(validateSex(sex) != 0){
+                        printf("Tente novamente: ");
+                        scanf(" %[^\n]", sex);
+                        sex[0] = toupper(sex[0]);
+                    }
+
+                    strcpy(nodeBuffer->sex, sex);
+                    break;
+                case 3:
+                    printf("Digite o novo endereco: ");
+                    scanf(" %[^\n]", nodeBuffer->address);
+                    break;
+                case 4:
+                    double height;
+                    printf("Digite a nova altura: ");
+                    scanf("%lf", &height); 
+
+                    while (validateHeight(height) != 0){
+                        printf("Tente novamente: ");
+                        scanf("%lf", &height);
+                    }
+                    break;
+                case 5:
+                    int vaccine;
+                    printf("Digite o status de vacinacao novo: ");
+                    scanf("%d", &vaccine);
+
+                    while (validateVaccine(vaccine) != 0)
+                    {
+                        printf("Tente novamente: ");
+                        scanf("%d", &vaccine);
+                    };
+                    break;
+                case 0:
+                    return;
+                default:
+                    printf("Valor invalido\n");
+                    break;
+                }
+            }while(option != 0);
+        }
+        else{
+            nodeBuffer = nodeBuffer->PtrNext;
+        }
+    }
 
 }
 
-//static int displayList(){
-//    struct node *nodeBuffer;
-//    nodeBuffer = startNode;
+void displayList(){
+    struct node *nodeBuffer;
+    nodeBuffer = startNode;
+    int counter = 1;
 
-//    if(nodeBuffer == NULL){
-//        printf("List is empty");
-//        return 0;
-//    }
-//    else{
+    if(nodeBuffer == NULL){
+        printf("A lista esta vazia\n");
+        return;
+    }
+    else{
         
-//        while (nodeBuffer != NULL)
-//        {
-            
-//            printf("DATA: %d \n", nodeBuffer->data);
-            
-//            nodeBuffer = nodeBuffer->PtrProximo;
-//        }
-//    }
-//}
+       while (nodeBuffer != NULL)
+        {
+            printf("-----------NODE %d-----------\n", counter);
+            printf("ID: %d \n", nodeBuffer->ID);
+            printf("Nome: %s\n", nodeBuffer->name);
+            printf("Email: %s\n", nodeBuffer->email);
+            printf("Sexo: %s\n", nodeBuffer->sex);
+            printf("Endereco: %s\n", nodeBuffer->address);
+            printf("Altura %.2f\n", nodeBuffer->height);
+            printf("Status de vacinacao %d\n", nodeBuffer->vaccine);
+            counter++;
+            nodeBuffer = nodeBuffer->PtrNext;
+        }
+    }
+}
