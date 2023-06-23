@@ -20,14 +20,13 @@ struct node *nodeBuffer;
 
 void addNodes();
 void editNode();
+void deleteNode();
 void displayList();
 int generateID();
 int validateEmail(char email[]);
 int validateSex(char sexo[]);
 int validateHeight(double height);
 int validateVaccine(int vaccine);
- 
-
 
 int nodeCounter = 0;
 
@@ -35,10 +34,12 @@ int main () {
     int option;
 
     do{
+        printf("-----------------------------------------\n");
         printf("1 - Criar/Adicionar Nodes a lista\n");
         printf("2 - Editar dados do Node\n");
         printf("3 - Excluir Node\n");
-        printf("4 - Listar dados do Node\n");
+        printf("4 - Listar dados da Lista\n");
+        printf("0 - Sair do algoritmo\n");
         printf("Digite a opcao: ");
         scanf("%d", &option);
         switch (option)
@@ -49,10 +50,17 @@ int main () {
         case 2:
             editNode();
             break;
+        case 3:
+            deleteNode();
+            break;
         case 4:
             displayList();
             break;
+        case 0:
+            printf("------------Fechando programa------------");
+            break;
         default:
+            printf("Valor invalido\n");
             break;
         }
     }while (option != 0);
@@ -136,59 +144,6 @@ void addNodes(){
         nodeBuffer = nodeBuffer->PtrNext;
         nodeCounter++;
         printf("Novo node adicionado a lista com sucesso\n");
-    }
-}
-
-int generateID(){
-    srand(time(NULL));
-
-    int min = 10000;
-    int max = 99999;
-    int ID = (rand() % (max - min + 1)) + min;
-
-    return ID;
-}
-
-int validateEmail(char email[]){
-
-    for (int i = 0; i < strlen(email); i++)
-    {
-        if (email[i] == '@'){
-            return 0;
-        }
-    }
-    printf("Email invalido\n");
-    return 1;
-}
-
-int validateSex(char sex[]){
-    if ((strcmp(sex, "Masculino") == 0 || strcmp(sex, "Feminino") == 0 || strcmp(sex, "Indiferente") == 0)){
-        return 0;
-    }
-    else{
-        printf("Sexo invalido\n");
-        return 1;
-    }
-}
-
-int validateHeight(double height){
-
-    if (height >= 1 && height <= 2){
-        return 0;
-    }
-    else{
-        printf("Altura invalida\n");
-        return 1;
-    }
-}
-
-int validateVaccine(int vaccine){
-    if (vaccine == 1 || vaccine == 0){
-        return 0;
-    }
-    else{
-        printf("Vacina invalida\n");
-        return 1;
     }
 }
 
@@ -278,6 +233,34 @@ void editNode(){
 
 }
 
+void deleteNode(){
+    struct node *temp = startNode, *prev;
+    char email[100];
+
+    printf("Digite o email do usuario a ser excluido: ");
+    scanf(" %[^\n]", &email);
+ 
+    if (temp != NULL && strcmp(temp->email, email) == 0) {
+        startNode = temp->PtrNext;
+        free(temp);
+        printf("Node inicial excluido com sucesso\n");
+        return;
+    }
+ 
+    while (temp != NULL && strcmp(temp->email, email) != 0) {
+        prev = temp;
+        temp = temp->PtrNext;
+    }
+ 
+    if (temp == NULL)
+        return;
+ 
+    prev->PtrNext = temp->PtrNext;
+ 
+    free(temp);
+    printf("Node excluido com sucesso\n");
+}
+
 void displayList(){
     struct node *nodeBuffer;
     nodeBuffer = startNode;
@@ -304,3 +287,58 @@ void displayList(){
         }
     }
 }
+
+
+int generateID(){
+    srand(time(NULL));
+
+    int min = 10000;
+    int max = 99999;
+    int ID = (rand() % (max - min + 1)) + min;
+
+    return ID;
+}
+
+int validateEmail(char email[]){
+
+    for (int i = 0; i < strlen(email); i++)
+    {
+        if (email[i] == '@'){
+            return 0;
+        }
+    }
+    printf("Email invalido\n");
+    return 1;
+}
+
+int validateSex(char sex[]){
+    if ((strcmp(sex, "Masculino") == 0 || strcmp(sex, "Feminino") == 0 || strcmp(sex, "Indiferente") == 0)){
+        return 0;
+    }
+    else{
+        printf("Sexo invalido\n");
+        return 1;
+    }
+}
+
+int validateHeight(double height){
+
+    if (height >= 1 && height <= 2){
+        return 0;
+    }
+    else{
+        printf("Altura invalida\n");
+        return 1;
+    }
+}
+
+int validateVaccine(int vaccine){
+    if (vaccine == 1 || vaccine == 0){
+        return 0;
+    }
+    else{
+        printf("Vacina invalida\n");
+        return 1;
+    }
+}
+
