@@ -280,8 +280,8 @@ void displayList(){
             printf("Email: %s\n", nodeBuffer->email);
             printf("Sexo: %s\n", nodeBuffer->sex);
             printf("Endereco: %s\n", nodeBuffer->address);
-            printf("Altura %.2f\n", nodeBuffer->height);
-            printf("Status de vacinacao %d\n", nodeBuffer->vaccine);
+            printf("Altura: %.2f\n", nodeBuffer->height);
+            printf("Status de vacinacao: %d\n", nodeBuffer->vaccine);
             counter++;
             nodeBuffer = nodeBuffer->PtrNext;
         }
